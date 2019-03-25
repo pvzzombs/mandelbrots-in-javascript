@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mandelbrot JS</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+
+<canvas id="paper" width="200" height="200">
+</canvas>
+
+<script type="text/javascript">
+/* Init canvas, width, height, and context*/
+var canvas = document.getElementById("paper");
+var c = canvas.getContext("2d");
+var a = canvas.width;
+var b = canvas.height;
+/* create mandelbrot */
+function mandelbrot(){
+/*
+  px - Canvas x
+  py - canvas y
+  x - real x
+  y - imaginary y
+ */
+var px, py, x, y; 
+var zmx = a / 4;
+var zmy = b / 4;
+/*
+  loop from y's, then loop all x's
+ */
+for(py = 0; py < a; py++){
+	for(px = 0; px < b; px++){
+	
+	//zoom factor
+	x = -2.0 + px/zmx;
+	y = -2.0 + py/zmy;
+	
+	var xOld = x;
+	var yOld = y;
+	
+	var r = 0;
+	var i;
+	//
+	for(i = 0; i < 100; i++){
+	
+	var xNew = (xOld * xOld) - (yOld * yOld) - x;
+	var yNew = (2 * xOld * yOld) - y;
+	
+	//r = √xn² + yn²
+	//r² = xn² + yn²
+	var r = Math.sqrt((xNew * xNew) + (yNew * yNew));
+	if(r > 10000){
+	break;
+	}
+	
+	xOld = xNew;
+	yOld = yNew;
+	
+	}
+	//
+	if(r > 10000){
+	c.fillStyle = "white";
+	c.fillRect(px,py,1,1);
+	}else{
+	c.fillStyle = "black";
+	c.fillRect(px,py,1,1)
+	}
+	
+	}
+}
+
+}
+
+mandelbrot();
+</script>
+<p>Mandelbrot Set</p>
+</body>
+</html>

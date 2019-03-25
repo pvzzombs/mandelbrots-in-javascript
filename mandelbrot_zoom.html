@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mandelbrot JS</title>
+<style type="text/css">
+#trigger, #xp, #yp, #xz, #xm, #ym, #yz{
+height: 50px;
+width: 60px;
+}
+#xa, #ya, #za{
+height: 50px;
+width: 70px;
+}
+</style>
+</head>
+<body>
+
+<canvas id="paper" width="200" height="200">
+</canvas>
+
+<script type="text/javascript">
+/* Init canvas, width, height, and context*/
+var canvas = document.getElementById("paper");
+var c = canvas.getContext("2d");
+var a = canvas.width;
+var b = canvas.height;
+
+var pan = 0.01;
+var zooms = 50;
+var panX = -1.0;
+var panY = -2.0;
+
+/* create mandelbrot */
+function mandelbrot(zm, panX, panY){
+/*
+  px - Canvas x
+  py - canvas y
+  x - real x
+  y - imaginary y
+ */
+var px, py, x, y; 
+/*
+  loop from y's, then loop all x's
+ */
+for(py = 0; py < a; py++){
+	for(px = 0; px < b; px++){
+	
+	//zoom factors
+	x = panX + px/zm;
+	y = panY + py/zm;
+	
+	//x=-.50 + px/1200;
+	//y=-.74 + py/1200;
+	
+	var xOld = x;
+	var yOld = y;
+	
+	var r = 0;
+	var i;
+	//
+	for(i = 0; i < 255; i++){
+	
+	var xNew = (xOld * xOld) - (yOld * yOld) - x;
+	var yNew = (2 * xOld * yOld) - y;
+	
+
+	var r = Math.sqrt((xNew * xNew) + (yNew * yNew));
+	if((xNew * xNew + yNew * yNew ) > 4){
+	break;
+	}
+	
+	xOld = xNew;
+	yOld = yNew;
+	
+	}
+	//color
+	var shade = i.toString(16);
+	c.fillStyle = "#"+ shade + shade + shade;
+	c.fillRect(px,py,1,1);
+	}
+}
+
+}
+
+function work(){
+document.getElementById("xa").value = -1;
+document.getElementById("ya").value = -2;
+document.getElementById("za").value = 50;
+mandelbrot(50, -1.0, -2.0);
+}
+
+function xScroll(n){
+var temp = n ? parseFloat(document.getElementById("xa").value) + pan : parseFloat(document.getElementById("xa").value) - pan;
+document.getElementById("xa").value = temp;
+panX = temp;
+mandelbrot(zooms, temp, panY);
+}
+
+function yScroll(n){
+var temp = n ? parseFloat(document.getElementById("ya").value) + pan : parseFloat(document.getElementById("ya").value) - pan;
+document.getElementById("ya").value = temp;
+panY = temp;
+mandelbrot(zooms, panX, temp);
+}
+
+function zoomIn(n){
+zooms = zooms + 50;
+pan = (panX + 2 / zooms) - (panX - 1 / zooms);
+document.getElementById("za").value = zooms;
+mandelbrot(zooms, panX, panY);
+}
+
+function zoomOut(n){
+zooms = zooms - 50;
+pan = (panX + 2 / zooms) - (panX - 1 / zooms)
+document.getElementById("za").value = zooms;
+mandelbrot(zooms, panX, panY);
+}
+
+//favorable zoom
+//x: -0.373346235978374
+//y: -0.6582261932152258
+//Zoom: 7000
+</script>
+
+<p>Mandelbrot Set Generator</p>
+x-axis: <input type="text" id="xa" value="-1"/><input type="button" id="xp" value="+" onclick="xScroll(1)"/><input type="button" id="xm" value="-" onclick="xScroll(0)"/><br/>
+y-axis: <input type="text" id="ya" value="-2"/><input type="button" id="yp" value="+" onclick="yScroll(1)"/><input type="button" id="ym" value="-" onclick="yScroll(0)"/><br/>
+zoom: <input type="text" id="za" value="50"/><input type="button" id="xz" value="+" onclick="zoomIn()"/><input type="button" id="yz" value="-" onclick="zoomOut()"/><br/>
+
+<input type="button" id="trigger" value="RESET" onclick="work()"/>
+
+<br />
+<p style="font-size: 10px">pvzzombs 2019</p>
+</body>
+</html>
