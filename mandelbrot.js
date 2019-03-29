@@ -1,8 +1,6 @@
 //Create the canvas, then collect the height and width
 var a, b, c, canvas;
 
-//multithreading
-var thread = new Multithread(2);
 
 //to prevent error during loading, make sure that
 //the canvas is loaded first before calling any methods
@@ -38,7 +36,7 @@ pallete.setNumberRange(0,maxI);
 
 //create mandelbrot function that 
 //accepts zooms, panX and panY
-/*function mandelbrot(zm, panX, panY){
+function mandelbrot(zm, panX, panY){
 //reset ticks
 ticks = 0;
 //px - Canvas x
@@ -88,55 +86,7 @@ for(py = 0; py < a; py++){
 	}
 }
 console.log("Total ticks: " + ticks + ", Is Freezing ? Then Click Reset Button...");
-}*/
-var mandelbrot = thread.process(
-  function(zm, panX, panY, a, b, maxI){
-  var px, py, x, y, list = []; 
-  a = a ? a : 200;
-  b = b ? b : 200;
-  maxI = maxI ? maxI : 100;
-  
-  for(px = 0; px < b; px++){
-  var temp = [];
-  for(py = 0; py < a; py++){
-  
-  x = panX + px/zm;
-  y = panY + py/zm;
-  
-  var xOld = x;
-  var yOld = y;
-  var r = 0;
-  var i;
-  
-  for(i = 0; i < maxI; i++){
-  
-  var xNew = (xOld * xOld) - (yOld * yOld) - x;
-  var yNew = (2 * xOld * yOld) - y;
-  
-  var r = Math.sqrt((xNew * xNew) + (yNew * yNew));
-  if((xNew * xNew + yNew * yNew ) > 4){
-  break;
-  }
-  
-  xOld = xNew;
-  yOld = yNew;
-  
-  }
-  temp.push(i);
-  }
-  list.push(temp);
-  }
-  return list;
-  }, function(arr){
-  	for(var i = 0; i < a; i++){
-  	for(var j = 0; j < b; j++){
-  	var shade = pallete.colourAt(arr[i][j]);
-  	c.fillStyle = "#"+shade;
-  	c.fillRect(i,j,1,1);
-
-  	}
-  }  	
-});
+}
 //reset :-)
 function work(){
 document.getElementById("xa").value = -1;
@@ -152,7 +102,7 @@ maxI = 50;
 pallete.setNumberRange(0,maxI);
 
 show();
-mandelbrot(50, -1.0, -2.0, a, b, maxI);
+mandelbrot(50, -1.0, -2.0);
 }
 
 //left to right scroll adjustment
@@ -161,7 +111,7 @@ var temp = n ? parseFloat(document.getElementById("xa").value) + pan : parseFloa
 document.getElementById("xa").value = temp;
 panX = temp;
 show();
-mandelbrot(zooms, temp, panY, a, b, maxI);
+mandelbrot(zooms, temp, panY);
 }
 
 //top to bottom scroll adjustment
@@ -170,7 +120,7 @@ var temp = n ? parseFloat(document.getElementById("ya").value) + pan : parseFloa
 document.getElementById("ya").value = temp;
 panY = temp;
 show();
-mandelbrot(zooms, panX, temp, a, b, maxI);
+mandelbrot(zooms, panX, temp);
 }
 
 //zoom in function
@@ -191,7 +141,7 @@ maxI = 500;
 }
 
 show();
-mandelbrot(zooms, panX, panY, a, b, maxI);
+mandelbrot(zooms, panX, panY);
 }
 
 //zoom out function
@@ -211,7 +161,7 @@ pallete.setNumberRange(0,255);
 maxI = 255;
 }
 show();
-mandelbrot(zooms, panX, panY, a, b, maxI);
+mandelbrot(zooms, panX, panY);
 }
 
 //adjust zoomfactor
