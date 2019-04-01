@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Mandelbrot JS</title>
+<title>Mandelbrot in HTML5 Javascript</title>
 <script src="rainbowvis.js"></script>
 <script src="multithread.js"></script>
 <style type="text/css">
@@ -17,7 +17,7 @@ width: 70px;
 </head>
 <body>
 
-<canvas id="paper" width="200" height="200">
+<canvas id="paper" width="800" height="800">
 </canvas>
 <script src="mandelbrot.js"></script>
 <p>Mandelbrot Set Generator</p>
@@ -25,7 +25,7 @@ x-axis: <input type="text" id="xa" value="-1"/><input type="button" id="xp" valu
 <br/>
 y-axis: <input type="text" id="ya" value="-2"/><input type="button" id="yp" value="+" onclick="yScroll(1)"/><input type="button" id="ym" value="-" onclick="yScroll(0)"/><br/>
 <br/>
-zoom: <input type="text" id="za" value="50"/><input type="button" id="xz" value="+" onclick="zoomIn()"/><input type="button" id="yz" value="-" onclick="zoomOut()"/><br/>
+zoom: <input type="text" id="za" value=""/><input type="button" id="xz" value="+" onclick="zoomIn()"/><input type="button" id="yz" value="-" onclick="zoomOut()"/><br/>
 <br/>
 zoom-factor: <input type="text" id="zf" value="100"/><input type="button" id="zfb" value="Change" onclick="zoomFactor()"/><br/>
 <br/>

@@ -22,13 +22,7 @@ try{
 //per complex number
 //create pallete to color mandelbrot by
 //using rainbowvis.js
-var pan = 0.01;
-var zooms = 50;
-var panX = -1.0;
-var panY = -2.0;
-var zf = 50;
-var maxI = 100;
-var ticks = 0;
+var pan, zooms, panX, panY, zf, maxI = 50, ticks;
 
 var pallete = new Rainbow();
 pallete.setSpectrum("#000764","#206bcb","#edffff","#ffaa00","#000200");
@@ -48,22 +42,19 @@ var px, py, x, y;
 
 //loop from y's, then loop all x's
 
-for(py = 0; py < a; py++){
-	for(px = 0; px < b; px++){
+for(px = 0; px < b; px+=4){
+	for(py = 0; py < a; py+=4){
 	
 	//zoom factors
 	x = panX + px/zm;
 	y = panY + py/zm;
 	
-	//x=-.50 + px/1200;
-	//y=-.74 + py/1200;
-	
-	var xOld = x;
-	var yOld = y;
+	var xOld = 0;
+	var yOld = 0;
 	
 	var r = 0;
 	var i;
-	//
+
 	for(i = 0; i < maxI; i++){
 	ticks++
 	var xNew = (xOld * xOld) - (yOld * yOld) - x;
@@ -79,22 +70,23 @@ for(py = 0; py < a; py++){
 	yOld = yNew;
 	
 	}
-	//color
+	//coloring
 	var shade = pallete.colourAt(i);
 	c.fillStyle = "#"+shade;
-	c.fillRect(px,py,1,1);
+	c.fillRect(px,py,4,4);
 	}
 }
 console.log("Total ticks: " + ticks + ", Is Freezing ? Then Click Reset Button...");
 }
-//reset :-)
+
+//reset
 function work(){
 document.getElementById("xa").value = -1;
 document.getElementById("ya").value = -2;
-document.getElementById("za").value = 50;
+document.getElementById("za").value = a/4;
 
 pan = 0.01;
-zooms = 50;
+zooms = a / 4;
 panX = -1.0;
 panY = -2.0;
 zf = 50;
@@ -102,7 +94,7 @@ maxI = 50;
 pallete.setNumberRange(0,maxI);
 
 show();
-mandelbrot(50, -1.0, -2.0);
+mandelbrot(zooms, panX, panY);
 }
 
 //left to right scroll adjustment
