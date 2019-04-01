@@ -7,10 +7,14 @@ Some of my collection of mandelbrot sets
 * plain black and white 
 * with the shades of gray 
 * with zoom control 
+* with colorful pallete (see test.html) 
 
 #### What to do ... 
 *  Add more comments
+*  faster loading of mandelbrot set
+*  better coloring pallete 
 *  ...
 
 #### Can we modify the code ? 
-Yes ☺
+Yes ☺. You may also submit pull request, and issues too! 
+
