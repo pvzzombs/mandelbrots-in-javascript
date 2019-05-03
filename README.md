@@ -1,4 +1,4 @@
-![Mandelbrot](https://raw.githubusercontent.com/pvzzombs/mandelbrots-in-javascript/master/_20190324_211353.JPG) 
+![Mandelbrot](https://raw.githubusercontent.com/pvzzombs/mandelbrots-in-javascript/master/mandelbrot_set.JPG) 
 # mandelbrots-in-javascript 
 Some of my collection of mandelbrot sets  
 
