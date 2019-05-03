@@ -1,6 +1,8 @@
 //Create the canvas, then collect the height and width
 var a, b, c, canvas;
 
+//zoomon click
+var zoomOnClick = true;
 
 //to prevent error during loading, make sure that
 //the canvas is loaded first before calling any methods
@@ -11,6 +13,54 @@ a = canvas.width;
 b = canvas.height;
 }
 
+document.getElementById("paper").onclick = function(e){
+  if(zoomOnClick){
+    var mx = panX + e.clientX / zooms;
+    var my = panY + e.clientY / zooms;
+    zf = 1.5;
+    zooms *= zf;
+    panX = mx - (e.clientX / zooms);
+    panY = my - (e.clientY / zooms);
+  }else{
+    var mx = panX + e.clientX / zooms;
+    var my = panY + e.clientY / zooms;
+    zf = 1.5;
+    zooms /= zf;
+    panX = mx - (e.clientX / zooms);
+    panY = my - (e.clientY / zooms);
+  }
+  
+  pan = (panX + 2 / zooms) - (panX - 1 / zooms);
+  
+  document.getElementById("xa").value = panX;
+  document.getElementById("ya").value = panY;
+  document.getElementById("za").value = zooms;
+  
+  pallete.setNumberRange(0,maxI);
+  if(0 < zooms && zooms < 100){
+    pallete.setNumberRange(0,100);
+    maxI = 100;
+  }else if(100 < zooms && zooms < 1000){
+    pallete.setNumberRange(0,255);
+    maxI = 255;
+  }else if(1000 < zooms && zooms < 10000){
+    pallete.setNumberRange(0,500);
+    maxI = 500;
+  }else if(10000 < zooms && zooms < 100000){
+    pallete.setNumberRange(0, 750);
+    maxI = 750;
+  }
+  
+  show();
+  mandelbrot(zooms, panX, panY)
+}
+
+function plus(){
+  zoomOnClick = true;
+}
+function minus(){
+  zoomOnClick = false;
+}
 //in the instance, create all thngs
 try{
 //pan is the length of scroll
@@ -42,38 +92,30 @@ var px, py, x, y;
 
 //loop from y's, then loop all x's
 
-for(px = 0; px < b; px+=4){
-	for(py = 0; py < a; py+=4){
+for(px = 0; px < a; px+=2){
+  for(py = 0; py < b; py+=2){
+    //zoom factors
+	x0 = panX + px/zm;
+	y0 = panY + py/zm;
 	
-	//zoom factors
-	x = panX + px/zm;
-	y = panY + py/zm;
+	var x = 0;
+	var y = 0;
 	
-	var xOld = 0;
-	var yOld = 0;
-	
-	var r = 0;
-	var i;
-
-	for(i = 0; i < maxI; i++){
-	ticks++
-	var xNew = (xOld * xOld) - (yOld * yOld) - x;
-	var yNew = (2 * xOld * yOld) - y;
-	
-
-	var r = Math.sqrt((xNew * xNew) + (yNew * yNew));
-	if((xNew * xNew + yNew * yNew ) > 4){
-	break;
+	var i = 0;
+    var xtemp;
+    
+	while (x*x + y*y <= 2*2  &&  i < maxI) {
+	  ticks++
+	  xtemp = x*x - y*y + x0
+	  y = 2*x*y + y0
+	  x = xtemp
+   	  i = i + 1
 	}
 	
-	xOld = xNew;
-	yOld = yNew;
-	
-	}
 	//coloring
 	var shade = pallete.colourAt(i);
 	c.fillStyle = "#"+shade;
-	c.fillRect(px,py,4,4);
+	c.fillRect(px,py,2,2);
 	}
 }
 console.log("Total ticks: " + ticks + ", Is Freezing ? Then Click Reset Button...");
@@ -87,7 +129,7 @@ document.getElementById("za").value = a/4;
 
 pan = 0.01;
 zooms = a / 4;
-panX = -1.0;
+panX = -2.5;
 panY = -2.0;
 zf = 50;
 maxI = 50;
