@@ -17,6 +17,11 @@
   width: 300px;
   height: 150px;
 }
+#clrt, #lrg{
+  border: 1px solid black;
+  width:125px;
+  height: 50px;
+}
 tr{
   text-align: center;
 }
@@ -59,14 +64,16 @@ Uses rainbow-vis.js for pallete and coloring.
 	zoom: <input type="text" id="za" value="Unspecified"/>
 	<input type="button" id="xz" value="+" onclick="zoomIn()"/>
 	<input type="button" id="yz" value="-" onclick="zoomOut()"/>
-	<br/>
-	<br/>
+	<br />
+	<input type="button" id="lrg" value="Change" onclick="zoom()"/>
+	<br />
+	<br />
 	zoom-factor: <input type="text" id="zf" value="100"/>
 	<input type="button" id="zfb" value="Change" onclick="zoomFactor()"/>
 	<br />
 	<br />
 	iteration: <input type="text" id="mi" value="50"/>
-	<input type="button" id="trigger" value="Iteration" onclick="changeMaxI()"/>
+	<input type="button" id="trigger" value="Change" onclick="changeMaxI()"/>
 	<br />
 	<br />
 	pallete(Use space as delimiter):
@@ -74,9 +81,16 @@ Uses rainbow-vis.js for pallete and coloring.
 	<textarea id="plt" width="150">red orange yellow black</textarea>
 	<input type="button" id="trigger" value="Change pallete" onclick="changePallete()"/>	
 	<br />
+	<br />
+	coloringType: <input type="button" id="clrt" value="smoothColoring" onclick="changeColoringType()"/>
+	<br />
 	<p> Advance Details: </p>
 	<div id="dtls">
-	Start by clicking the reset button.
+	Start by clicking the reset button.<br />
+	Available palletes: <br />
+	#000764 #206bcb #edffff #ffaa00 #000200<br/>
+	red orange yellow green blue indigo violet black<br />
+	white black white black<br />
 	</div>
 	</td>
 </tr>

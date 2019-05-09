@@ -69,8 +69,8 @@ rect = canvas.getBoundingClientRect()
   }
   
   show();
-  abortRun();
-  startRun();
+  requestAnimationFrame(abortRun);
+  requestAnimationFrame(startRun);
 }
 //when + was clicked above the canvas
 function plus(){
@@ -106,14 +106,21 @@ try{
 //per complex number
 //create pallete to color mandelbrot by
 //using rainbowvis.js
-var pan, zooms, panX, panY, zf = 1.5, maxI = 50, ticks;
+var pan, zooms, panX, panY, zf, maxI = 50, ticks, coloringType;
 
+//pallete for escapeTime
 var pallete = new Rainbow();
 pallete.setSpectrum("#000764","#206bcb","#edffff","#ffaa00","#000200");
 pallete.setNumberRange(0,maxI);
 
+//pallete for smoothColoring
+var _pallete = ["#000764","#206bcb","#edffff","#ffaa00","#000200"];
+
 //function that draws the mandelbrot set
 // based on current zoom, panX, panY and scale
+
+/***********************MANDELBROT*********************************/
+/******************************************************************/
 function mandelbrot(zm, panX, panY, scale){
 //cncel run in some case
 if(!running){
@@ -155,14 +162,63 @@ for(px = 0; px < a; px+=scale){
 	}
 	
 	//coloring
-	var shade = pallete.colourAt(i);
-	c.fillStyle = "#"+shade;
-	c.fillRect(px,py,scale, scale);
+	if("smoothColoring" === coloringType){
+		if(i < maxI){
+		  log_zn = Math.log(x*x + y*y)/2
+		  nu = Math.log( log_zn / Math.log(2) ) / Math.log(2);
+	      i = i + 1 - nu;
+		  c.fillStyle = color(i / maxI * (_pallete.length - 1));
+		  c.fillRect(px, py, scale, scale);
+		}else{
+		  c.fillStyle = "black";
+		  c.fillRect(px, py, scale, scale);
+		}
+	  }else{
+		c.fillStyle = color(i);
+		c.fillRect(px, py, scale, scale);
+	  }
 	}
 }
 console.log("Total ticks: " + ticks + ", based on scale " + scale);
 }
+/******************************************************************/
+/******************************************************************/
 
+function color(num,x,y){
+	switch(coloringType){
+	case "escapeTime":
+	  var selection = pallete.colourAt(num);
+	  return "#" + selection;
+	  break;
+	case "smoothColoring":
+      return interpolation(num);
+	  break;
+	default:
+	  var selection = pallete.colourAt(num);
+	  return "#" + selection;	
+	}
+  }
+function hexToRGBObject(hex){
+  hex = (hex+"").replace("#","");
+  return {
+    r: parseInt(hex.charAt(0) + hex.charAt(1),16),
+	g: parseInt(hex.charAt(2) + hex.charAt(3),16),
+	b: parseInt(hex.charAt(4) + hex.charAt(5),16)
+  }
+
+}
+function linear_interpolate(color1, color2, ratio){
+    var r = Math.floor((color2.r - color1.r)*ratio+color1.r);
+	var g = Math.floor((color2.g - color1.g)*ratio+color1.g);
+	var b = Math.floor((color2.b - color1.b)*ratio+color1.b);
+	return "rgb(" + r + "," + g + "," + b + ")";
+}
+function interpolation(iteration){
+	var color1 = hexToRGBObject(_pallete[Math.floor(iteration)]);
+	var color2 = hexToRGBObject(_pallete[Math.floor(iteration)+1]);
+	return linear_interpolate(color1, color2, iteration % 1);
+}
+  
 //reset
 function work(){
 document.getElementById("xa").value = -2.5;
@@ -177,6 +233,9 @@ zf = 1.5;
 maxI = 50;
 pallete.setSpectrum("#000764","#206bcb","#edffff","#ffaa00","#000200");
 pallete.setNumberRange(0,maxI);
+_pallete = ["#000764","#206bcb","#edffff","#ffaa00","#000200"];
+coloringType = "smoothColoring";
+document.getElementById("clrt").value = coloringType;
 
 show();
 abortRun();
@@ -201,6 +260,20 @@ panY = temp;
 show();
 abortRun();
 startRun();
+}
+//the change zoom function
+function zoom(){
+	//NOT YET
+	/*var rect = canvas.getBoundingClientRect();
+    var mx = panX + (panX - rect.left) / zooms;
+    var my = panY + (panY - rect.top) / zooms;
+    zooms = document.getElementById("za");
+    panX = mx - ((panX - rect.left) / zooms);
+    panY = my - ((panY - rect.top) / zooms);
+  
+  show();
+  abortRun();
+  startRun();*/
 }
 
 //zoom in function
@@ -263,6 +336,25 @@ function changeMaxI(){
   startRun();
 }
 
+//changes coloringType
+function changeColoringType(){
+  var temp;
+  switch(coloringType){
+	case "smoothColoring":
+	  temp = "escapeTime";
+	  break;
+	case "escapeTime":
+	  temp = "smoothColoring";
+	  break;
+  }
+  coloringType = temp;
+  document.getElementById("clrt").value = temp;
+  
+  show();
+  abortRun();
+  startRun();
+}
+
 //adjust pallete
 function changePallete(){
   var temp = (document.getElementById("plt").value).split(" ");
@@ -278,11 +370,15 @@ function changePallete(){
 
 //show details
 function show(){
-var temp = "Scroll: " + pan + "<br /> Current zoom: " + zooms + "<br /> topLeftX: " +  panX + "<br /> topRightY: " + panY + "<br /> zoom factor: " +  zf + "<br /> max iterations of loop: " + maxI;
+var temp = "Scroll: " + pan + "<br /> Current zoom: " + zooms + "<br /> topLeftX: " +  panX + "<br /> topRightY: " + panY + "<br /> zoom factor: " +  zf + "<br /> max iterations of loop: " + maxI +  "<br /> uses " + coloringType + " algorithm for coloring";
 document.getElementById("dtls").innerHTML = temp;
 }
 
 /*favorable zoom
+-0.7253464660778749
+0.2520240908085526
+18892488895.231102
+
 -0.373346235978374
 -0.6582261932152258
 7000
