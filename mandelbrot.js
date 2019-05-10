@@ -261,6 +261,18 @@ show();
 abortRun();
 startRun();
 }
+
+//draw again
+function drawAgain(){
+  panX = parseFloat(document.getElementById("xa").value);
+  panY = parseFloat(document.getElementById("ya").value);
+  zooms = parseFloat(document.getElementById("za").value);
+  
+  show();
+  abortRun();
+  startRun();
+}
+
 //the change zoom function
 function zoom(){
 	//NOT YET
@@ -270,10 +282,16 @@ function zoom(){
     zooms = document.getElementById("za");
     panX = mx - ((panX - rect.left) / zooms);
     panY = my - ((panY - rect.top) / zooms);
+  */
+  zooms = document.getElementById("za").value;  
+  mx = ((panX + (a-1)/zooms) - panX) / 2;
+  panX -= mx;
+  my = ((panY + (b-1)/zooms) - panY) / 2;
+  panY -= mx;
   
   show();
   abortRun();
-  startRun();*/
+  startRun();
 }
 
 //zoom in function
@@ -368,6 +386,35 @@ function changePallete(){
   startRun();
 }
 
+//updateCoords
+function changeCoords(){
+  var temp = (document.getElementById("crd").value).split(" ");
+  if(temp.length < 4){
+  	alert(" Please enter complete details");
+  	return
+  }
+  panX = parseFloat(temp[0]);
+  panY = parseFloat(temp[1]);
+  zooms = parseFloat(temp[2]);
+  maxI = parseFloat(temp[3]);
+  pallete.setNumberRange(0, maxI);
+  
+  document.getElementById("xa").value = panX;
+  document.getElementById("ya").value = panY;
+  document.getElementById("za").value = zooms;
+  
+  show();
+  abortRun();
+  startRun();
+}
+
+//resize canvas
+function resize(){
+  a = canvas.width = parseInt(prompt("Please enter canvas width in pixels",200)) || 200;
+  b = canvas.height = parseInt(prompt("Please enter canvas height in pixels",200)) || 200;
+  
+  work();
+}
 //show details
 function show(){
 var temp = "Scroll: " + pan + "<br /> Current zoom: " + zooms + "<br /> topLeftX: " +  panX + "<br /> topRightY: " + panY + "<br /> zoom factor: " +  zf + "<br /> max iterations of loop: " + maxI +  "<br /> uses " + coloringType + " algorithm for coloring";

@@ -28,7 +28,7 @@ tr{
 #main{
   border: 1px solid black;
 }
-#plt {
+#plt, #crd{
   border: 1px solid black;
   width: 200px;
   height: 50px;
@@ -47,9 +47,11 @@ Uses rainbow-vis.js for pallete and coloring.
 	<input type="button" id="trigger" value="+" onclick="plus()"/>
 	<input type="button" id="trigger" value="-" onclick="minus()"/>
 	<input type="button" id="trigger" value="RESET" onclick="work()"/>
+	<input type="button" id="trigger" value="Re-draw" onclick="drawAgain()"/>
+	<input type="button" id="trigger" value="Resize" onclick="resize()"/>
 	<input type="button" id="trigger" value=" ? " onclick="about()"/>
 	</td>
-	<td rowspan="2">
+	<td rowspan="2" width="306">
 	<p>Mandelbrot Set Generator</p>
 	x-axis: <input type="text" id="xa" value="-2.5"/>
 	<input type="button" id="xp" value="+" onclick="xScroll(1)"/>
@@ -79,10 +81,15 @@ Uses rainbow-vis.js for pallete and coloring.
 	pallete(Use space as delimiter):
 	<br/>
 	<textarea id="plt" width="150">red orange yellow black</textarea>
-	<input type="button" id="trigger" value="Change pallete" onclick="changePallete()"/>	
+	<input type="button" id="lrg" value="Change pallete" onclick="changePallete()"/>	
 	<br />
 	<br />
 	coloringType: <input type="button" id="clrt" value="smoothColoring" onclick="changeColoringType()"/>
+	<br />
+	<br />
+	<p>update coords(Use space as delimiter): panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</p>
+	<textarea id="crd" width="150">-0.7253464660778749 0.2520240908085526 18892488895.231102 2500</textarea>
+	<input type="button" id="lrg" value="Update Coords" onclick="changeCoords()"/>
 	<br />
 	<p> Advance Details: </p>
 	<div id="dtls">
