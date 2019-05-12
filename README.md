@@ -10,9 +10,9 @@ Some of my collection of mandelbrot sets
 * with colorful pallete (see test.html) 
 
 #### What to do ... 
-*  Add more comments
-*  faster loading of mandelbrot set
-*  better coloring pallete 
+*  Add more comments(done)
+*  faster loading of mandelbrot set(done)
+*  better coloring pallete(done)
 *  ...
 
 #### Can we modify the code ? 
